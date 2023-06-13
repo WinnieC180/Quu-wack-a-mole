@@ -26,19 +26,30 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
     private JButton pStart;
     private Timer timer;
     private int seconds;
+    private int delay;
     private JLabel timerLabel;
     private JLabel timerLabel2; //the drawing
-    private static int currentScore;
+
+    private JLabel scoreB;
+    private JLabel score;
+    private int currentScore;
+    private JButton repeatGame;
 
     public Geese () {
-        timer = new Timer(1000, null);
-        seconds = 15;
+        timer = new Timer(500, null);
+        seconds = 30;
         timerLabel = new JLabel("" + seconds);
         timerLabel.setFont(new Font("Arial", Font.BOLD, 40));
         Color c = new Color(179, 125, 84);
         timerLabel.setForeground(c);
         timerLabel2 = new JLabel(" ");
         currentScore = 0;
+
+        scoreB = new JLabel();
+        score = new JLabel();
+        score.setFont(new Font("Arial", Font.BOLD,80));
+        Color c2 = new Color(179, 125, 84);
+        score.setForeground(c2);
 
         add(timerLabel);
         add(timerLabel2);
@@ -63,7 +74,11 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
         add(b8);
         b9 = new JButton("");
         add(b9);
+        repeatGame = new JButton("          ");
+        add(repeatGame);
         switchButton = new JButton("switch mode");
+        add(score);
+        add(scoreB);
 
         b1.addActionListener(this);
         b2.addActionListener(this);
@@ -76,8 +91,11 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
         b9.addActionListener(this);
         timer.addActionListener(this);
         pStart.addActionListener(this);
+        repeatGame.addActionListener(this);
         addMouseMotionListener(this);
 
+        scoreB.setVisible(false);
+        score.setVisible(false);
         pStart.setVisible(true);
         timerLabel.setVisible(false);
         timerLabel2.setVisible(false);
@@ -90,11 +108,9 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
         b7.setVisible(false);
         b8.setVisible(false);
         b9.setVisible(false);
+        repeatGame.setVisible(false);
     }
 
-    public static int getCurrentScore(){
-        return currentScore;
-    }
 
     @Override
     public void paintComponent(Graphics g){
@@ -105,6 +121,10 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
 
         timerLabel.setLocation(510, 75);
         timerLabel2.setLocation(470, 18);
+
+        scoreB.setLocation(65,260);
+        ImageIcon icon100 = new ImageIcon("src/scored.png");
+        scoreB.setIcon(icon100);
 
         if (seconds%2 == 0) {
             ImageIcon icon;
@@ -152,6 +172,16 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
         b7.setLocation(10,590);
         b8.setLocation(210,590);
         b9.setLocation(420,590);
+
+        score.setLocation(340,450);
+
+        ImageIcon icon110 = new ImageIcon("src/playagain.png");
+        repeatGame.setIcon(icon110);
+        repeatGame.setBorderPainted(false);
+        repeatGame.setContentAreaFilled(false);
+        repeatGame.setFocusPainted(false);
+        repeatGame.setOpaque(false);
+        repeatGame.setLocation(300,580);
 
         ImageIcon icon1;
         if (SimpleGUI.IsGeese()){
@@ -286,20 +316,7 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
             g.drawImage(iconImg10, x-30, y-57, null);
         }
 
-//        if (!SimpleGUI.timerFired) {
-//            SimpleGUI.timerFalse();
-//            b1.setVisible(false);
-//            b2.setVisible(false);
-//            b3.setVisible(false);
-//            b4.setVisible(false);
-//            b5.setVisible(false);
-//            b6.setVisible(false);
-//            b7.setVisible(false);
-//            b8.setVisible(false);
-//            b9.setVisible(false);
-//            randomGoose();
-//            SimpleGUI.timerRestart();
-//        }
+
     }
 
     private void randomGoose() {
@@ -351,7 +368,7 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
             String text = button.getText();
             if (text.equals("")) {
                 button.setVisible(false);
-                randomGoose();
+                currentScore++;
             } else if (text.equals("  ")) { //pStart
                 pStart.setVisible(false);
                 timer.start();
@@ -361,38 +378,62 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
                 timerLabel.setVisible(true);
                 timerLabel2.setVisible(true);
                 randomGoose();
+            } else if (text.equals("          ")){
+//                new SimpleGUI();
+                resetEverything();
             }
         }
+
     }
 
     public void timerFire() {
-        seconds--;
-        timerLabel.setText(Integer.toString(seconds));
-//        randomGoose();
-//        if (previous==1){
-//            b1.setVisible(false);
-//        } else if (previous==2){
-//            b2.setVisible(false);
-//        } else if (previous==3){
-//            b3.setVisible(false);
-//        } else if (previous==4){
-//            b4.setVisible(false);
-//        } else if (previous==5){
-//            b5.setVisible(false);
-//        } else if (previous==6){
-//            b6.setVisible(false);
-//        } else if (previous==7){
-//            b7.setVisible(false);
-//        } else if (previous==8){
-//            b8.setVisible(false);
-//        } else if (previous==9){
-//            b9.setVisible(false);
-//        }
+        delay++;
+        if (delay % 2 == 0) {
+            seconds--;
+            timerLabel.setText(Integer.toString(seconds));
+        }
+        b1.setVisible(false);
+        b2.setVisible(false);
+        b3.setVisible(false);
+        b4.setVisible(false);
+        b5.setVisible(false);
+        b6.setVisible(false);
+        b7.setVisible(false);
+        b8.setVisible(false);
+        b9.setVisible(false);
+        randomGoose();
 
         if (seconds == 0) {
+            String scorez = "" + currentScore;
+            score.setText(scorez);
             timer.stop();
-            SimpleGUI.cardLayout.show(SimpleGUI.mainPanel, "pane3");
+            score.setVisible(true);
+            scoreB.setVisible(true);
+//            SimpleGUI.cardLayout.show(SimpleGUI.mainPanel, "pane3");
+            repeatGame.setVisible(true);
+            b1.setVisible(false);
+            b2.setVisible(false);
+            b3.setVisible(false);
+            b4.setVisible(false);
+            b5.setVisible(false);
+            b6.setVisible(false);
+            b7.setVisible(false);
+            b8.setVisible(false);
+            b9.setVisible(false);
         }
+    }
+
+    private void resetEverything() {
+        seconds = 30;
+        currentScore = 0;
+        repeatGame.setVisible(false);
+        scoreB.setVisible(false);
+        pStart.setVisible(true);
+        score.setVisible(false);
+        timerLabel.setText("" + seconds);
+        timerLabel.setVisible(false);
+        timerLabel2.setVisible(false);
+        SimpleGUI.cardLayout.show(SimpleGUI.mainPanel, "pane1");
     }
 
     @Override
@@ -407,3 +448,4 @@ public class Geese extends JPanel implements ActionListener, MouseMotionListener
         repaint();
     }
 }
+

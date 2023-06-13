@@ -3,14 +3,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SimpleGUI extends JFrame implements ActionListener {
+public class SimpleGUI extends JFrame {
     private JLabel welcomeLabel;
 
     public static CardLayout cardLayout;
     public static JPanel mainPanel;
-    public static Timer timer;
-    public static boolean timerFired;
-    public ScoreBoard scores;
+//    public static Timer timer;
+//    public static boolean timerFired;
+//    public ScoreBoard scores;
     private static boolean isGeese =false;
     private Geese newPanel;
     private Home homeScreen;
@@ -39,12 +39,10 @@ public class SimpleGUI extends JFrame implements ActionListener {
         homeScreen = new Home();
 //        add(homeScreen);
         newPanel = new Geese();
-        scores = new ScoreBoard();
 //        add(newPanel);
         mainPanel.add("pane1", homeScreen);
         mainPanel.add("pane2", newPanel);
-        mainPanel.add("pane3", scores);
-        timer = new Timer(1000, null);
+//        timer = new Timer(1000, null);
         setVisible(true);
     }
 
@@ -55,20 +53,12 @@ public class SimpleGUI extends JFrame implements ActionListener {
         return isGeese;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source instanceof Timer) {
-            timerFired = true;
-            timer.stop();
-        }
-    }
-
-    public static void timerRestart() {
-        timer.restart();
-    }
-
-    public static void timerFalse() {
-        timerFired = false;
-    }
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        Object source = e.getSource();
+//        if (source instanceof Timer) {
+//            timerFired = true;
+//            timer.stop();
+//        }
+//    }
 }
